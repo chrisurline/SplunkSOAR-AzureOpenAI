@@ -1,0 +1,411 @@
+{
+    "appid": "6845bdf3-064d-4e04-8093-60cb58d510bd",
+    "name": "Azure OpenAI",
+    "description": "This app allows for the use of OpenAI completions via the OpenAI API and Azure OpenAI instance.",
+    "type": "information",
+    "product_vendor": "AI",
+    "logo": "azureopenai.svg",
+    "logo_dark": "azureopenai_dark.svg",
+    "product_name": "Azure OpenAI",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "AML RightSource c/o Chris Surline",
+    "license": "Copyright (c) AML RightSource c/o Chris Surline, 2023",
+    "app_version": "1.0.0",
+    "utctime_updated": "2023-06-23T13:28:46.284252Z",
+    "package_name": "phantom_azureopenai",
+    "main_module": "azureopenai_connector.py",
+    "min_phantom_version": "6.0.0.114895",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "api_key": {
+            "description": "The API key for your instance",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 0,
+            "name": "api_key",
+            "id": 0
+        },
+        "base_url": {
+            "description": "Base URL for API requests",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 1,
+            "name": "base_url",
+            "id": 1
+        },
+        "api_version": {
+            "description": "Version of the API to use (ex. '2023-03-15-preview')",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "2023-03-15-preview",
+            "order": 2,
+            "name": "api_version",
+            "id": 2
+        },
+        "deployment_name": {
+            "description": "Model deployment name",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 3,
+            "name": "deployment_name",
+            "id": 3
+        },
+        "max_tokens": {
+            "description": "Maximum number of tokens to use per API request",
+            "data_type": "numeric",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 4,
+            "name": "max_tokens",
+            "id": 4
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get completion",
+            "identifier": "get_completion",
+            "description": "Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.",
+            "verbose": "Given a prompt, the model will return a predicted completion.",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "prompt": {
+                    "description": "The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.  Note that <|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "prompt",
+                    "id": 1,
+                    "param_name": "prompt"
+                },
+                "temperature": {
+                    "description": "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0.5",
+                    "order": 1,
+                    "name": "temperature",
+                    "id": 2,
+                    "param_name": "temperature"
+                },
+                "top_p": {
+                    "description": "An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0.9",
+                    "order": 2,
+                    "name": "top_p",
+                    "id": 3,
+                    "param_name": "top_p"
+                },
+                "presence_penalty": {
+                    "description": "Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0",
+                    "order": 3,
+                    "name": "presence_penalty",
+                    "id": 4,
+                    "param_name": "presence_penalty"
+                },
+                "frequency_penalty": {
+                    "description": "Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0",
+                    "order": 4,
+                    "name": "frequency_penalty",
+                    "id": 5,
+                    "param_name": "frequency_penalty"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.prompt",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "prompt",
+                    "column_order": 0
+                },
+                {
+                    "column_name": "response",
+                    "column_order": 1,
+                    "data_type": "string",
+                    "data_path": "action_result.data.*.choices.*.text"
+                },
+                {
+                    "data_path": "action_result.parameter.presence_penalty",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.frequency_penalty",
+                    "data_type": "string"
+                },
+                {
+                    "column_name": "finish_reason",
+                    "column_order": 4,
+                    "data_type": "string",
+                    "data_path": "action_result.data.*.choices.*.finish_reason",
+                    "example_values": [
+                        "stop"
+                    ]
+                },
+                {
+                    "column_name": "completion_id",
+                    "column_order": 2,
+                    "data_type": "string",
+                    "data_path": "action_result.data.*.id",
+                    "example_values": [
+                        "cmpl-7BUzLhrFFFba27Bc6EIdOSL40oSY2"
+                    ]
+                },
+                {
+                    "column_name": "model",
+                    "column_order": 3,
+                    "data_type": "string",
+                    "data_path": "action_result.data.*.model",
+                    "example_values": [
+                        "gpt-35-turbo"
+                    ]
+                },
+                {
+                    "column_name": "prompt_tokens",
+                    "column_order": 6,
+                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.usage.prompt_tokens"
+                },
+                {
+                    "column_name": "completion_tokens",
+                    "column_order": 7,
+                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.usage.completion_tokens"
+                },
+                {
+                    "column_name": "total_tokens",
+                    "column_order": 8,
+                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.usage.total_tokens"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get chat completion",
+            "identifier": "get_chat_completion",
+            "description": "Creates a model response for the given chat conversation.",
+            "verbose": "Given a list of messages comprising a conversation, the model will return a response.",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "message": {
+                    "description": "The prompt that will receive a response.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "message",
+                    "id": 1,
+                    "param_name": "message"
+                },
+                "few_shot": {
+                    "description": "Example chat history that will be used as context for the response. Formatted as: [{\"role\":\"user\", \"content\":\"What is 9 + 3?\"},{\"role\":\"assistant\", \"content\":\"9 + 3 is equal to 12.\"}]",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "few_shot",
+                    "id": 2,
+                    "param_name": "few_shot"
+                },
+                "temperature": {
+                    "description": "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0.5",
+                    "order": 2,
+                    "name": "temperature",
+                    "id": 3,
+                    "param_name": "temperature"
+                },
+                "top_p": {
+                    "description": "An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0.9",
+                    "order": 3,
+                    "name": "top_p",
+                    "id": 4,
+                    "param_name": "top_p"
+                },
+                "presence_penalty": {
+                    "description": "Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0",
+                    "order": 4,
+                    "name": "presence_penalty",
+                    "id": 5,
+                    "param_name": "presence_penalty"
+                },
+                "frequency_penalty": {
+                    "description": "Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "0",
+                    "order": 5,
+                    "name": "frequency_penalty",
+                    "id": 6,
+                    "param_name": "frequency_penalty"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.message",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "message",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.few_shot",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "few_shot",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.temperature",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "temperature",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.top_p",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "top_p",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.presence_penalty",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "presence_penalty",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.parameter.frequency_penalty",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "frequency_penalty",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ],
+    "pip3_dependencies": {
+        "pypi": [
+            {
+                "module": "openai"
+            }
+        ]
+    }
+}
